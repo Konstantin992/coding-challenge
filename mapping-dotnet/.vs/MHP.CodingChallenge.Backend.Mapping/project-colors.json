@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "ProjectMap": {
+    "c2bb5229-98ba-451c-873d-b54325631273": {
+      "ProjectGuid": "c2bb5229-98ba-451c-873d-b54325631273",
+      "DisplayName": "MHP.CodingChallenge.Backend.Mapping",
+      "ColorIndex": 0
+    }
+  },
+  "NextColorIndex": 1
+}
