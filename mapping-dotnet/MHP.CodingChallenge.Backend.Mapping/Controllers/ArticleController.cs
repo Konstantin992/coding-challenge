@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using MHP.CodingChallenge.Backend.Mapping.Data;
 using MHP.CodingChallenge.Backend.Mapping.Data.DTO;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -26,19 +26,70 @@ namespace MHP.CodingChallenge.Backend.Mapping.Controllers
         [HttpGet]
         public IActionResult Get()
         {
-           return new JsonResult(_articleService.GetAll());
+            try
+            {
+                var articles = _articleService.GetAll();
+
+                return StatusCode(StatusCodes.Status200OK, articles);
+            }
+            catch (Exception)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError);
+            }
+
         }
 
         [HttpGet("{id}")]
+        [ProducesResponseType(typeof(List<ArticleDto>), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult GetById(long id)
         {
-            return new JsonResult(_articleService.GetById(id));
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var dto = _articleService.GetById(id);
+
+                    if (dto != null)
+                    {
+                        return StatusCode(StatusCodes.Status200OK, dto);
+                    }
+                    return StatusCode(StatusCodes.Status404NotFound);
+                }
+                catch (Exception)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
         }
 
         [HttpPost]
+        [ProducesResponseType(typeof(ArticleDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         public IActionResult Create(ArticleDto article)
         {
-            return new JsonResult(_articleService.Create(article));
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var dto = _articleService.Create(article);
+                    return StatusCode(StatusCodes.Status201Created, dto);
+                }
+                catch (Exception)
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+            }
+            else
+            {
+                return StatusCode(StatusCodes.Status400BadRequest);
+            }
         }
     }
 }

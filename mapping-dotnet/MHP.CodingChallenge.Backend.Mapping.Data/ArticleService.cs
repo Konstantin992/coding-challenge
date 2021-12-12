@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using MHP.CodingChallenge.Backend.Mapping.Data.DB;
 using MHP.CodingChallenge.Backend.Mapping.Data.DTO;
 
@@ -19,15 +20,20 @@ namespace MHP.CodingChallenge.Backend.Mapping.Data
         public List<ArticleDto> GetAll()
         {
             List<Article> articles = _articleRepository.GetAll();
-            // TODO 
-            return new List<ArticleDto>();
+            var dtos = articles.Select(article => _articleMapper.Map(article))
+                               .Select(articles => 
+                               {
+                                    articles.Blocks = articles.Blocks.OrderBy(b => b.SortIndex).ToList();
+                                    return articles;
+                               }).ToList();
+            return dtos;
         }
 
         public object GetById(long id)
         {
             Article article = _articleRepository.FindById(id);
-            // TODO
-            return new ArticleDto();
+            var dto = _articleMapper.Map(article);
+            return dto;
         }
 
         public object Create(ArticleDto articleDto)

@@ -8,6 +8,7 @@
     <ProjectReference Include="..\MHP.CodingChallenge.Backend.Dependency.Inquiry\MHP.CodingChallenge.Backend.Dependency.Inquiry.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="5.0.0" />
   </ItemGroup>
 </Project>
